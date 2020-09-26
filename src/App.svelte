@@ -18,6 +18,14 @@
 		let l_responses = [];
 		
 		conjugations.forEach((c, i) => {
+			c = c.replaceAll("^a", "á");
+			c = c.replaceAll("^e", "é");
+			c = c.replaceAll("^i", "í");
+			c = c.replaceAll("^o", "ó");
+			c = c.replaceAll("^u", "ú");
+			c = c.replaceAll("^^u", "ü");
+			c = c.replaceAll("^n", "ñ");
+
 			if(c !== verbs[0].indicPresent[i]) {
 				l_correct = false;
 				l_responses = l_responses.concat([`${c === "" ? "blank" : c} should be ${verbs[0].indicPresent[i]}`]);
@@ -45,6 +53,8 @@
 	<button on:click={handleSubmit}>
 		Check
 	</button>
+
+	<p>Pro Tip: place ^ infront of accented characters ( ^n = ñ ) and ^^u for ü</p>
 </main>
 
 <style>
