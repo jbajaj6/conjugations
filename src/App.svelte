@@ -3,14 +3,36 @@
 </svelte:head>
 
 <script>
-	const verbs = [{
-		name: "Poner",
-		indicPresent: ['pongo', 'pones', 'pone', 'ponemos', 'ponéis', 'ponen']
-	}]
+	import * as firebase from "firebase/app";
+
+	import 'firebase/firestore';
+	
+	var firebaseConfig = {
+		apiKey: "AIzaSyAyvaVVZs8goGeUch0lvhQhlo4Ika0WyGY",
+		authDomain: "conjugations-8df51.firebaseapp.com",
+		databaseURL: "https://conjugations-8df51.firebaseio.com",
+		projectId: "conjugations-8df51",
+		storageBucket: "conjugations-8df51.appspot.com",
+		messagingSenderId: "792949381129",
+		appId: "1:792949381129:web:ae7f5e00984e5fdae380d8",
+		measurementId: "G-71MBDCTS7P"
+	};
+	// Initialize Firebase
+	firebase.initializeApp(firebaseConfig);
+	const db = firebase.firestore();
+	let verbs = getVerbs();
+
 	let conjugations = ['', '', '', '', '', ''];
 	const forms = ['Yo', 'Tu', 'El/Ella/Usted', 'Nosotros', 'Vosotros', 'Ellos/Ellas/Ustedes'];
 	let responses = [];
 	let correct = true;
+
+	async function getVerbs() {
+		/* move this into a cloud function at some point */
+		const verbsRef = db.collection('verbs').doc('poner');
+		const verb = await verbsRef.get();
+		return verb;
+	}
 	
 	function handleSubmit() {
 		// dont update variables until done as to not trigger update
@@ -38,7 +60,11 @@
 </script>
 
 <main>
-	<h1>Verb: {verbs[0].name}</h1>
+	{#await verbs}
+		<h1>Verb: Loading...</h1>
+	{:then verbs} 
+		<h1>Verb: {verbs.data().name}</h1>
+	{/await}
 	<p>Your last answer was {correct ? "correct" : "incorrect"}</p>
 	{#if !correct}
 		{#each responses as r}
