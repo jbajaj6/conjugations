@@ -44,6 +44,7 @@
 			let c_conjugations = v[index].indicPresent;
 
 			conjugations.forEach((c, i) => {
+                c = c.toLowerCase();
 				c = c.replaceAll("^a", "á");
 				c = c.replaceAll("^e", "é");
 				c = c.replaceAll("^i", "í");
