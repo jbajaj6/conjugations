@@ -77,7 +77,7 @@
 		<h1>Verb: Loading...</h1>
 		{:then verbs}
 			<h1>Verb: {verbs[index].name}</h1>
-			<p>{verbs[index].definition}</p>
+			<p><b>{verbs[index].definition}</b></p>
 		{/await}
 		<p>Your last answer was {correct ? "correct" : "incorrect"}</p>
 		{#if !correct}
