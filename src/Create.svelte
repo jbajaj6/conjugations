@@ -10,8 +10,25 @@
     let name = "";
     let savedName = "";
     let saved = false;
+    let definition = "";
+    let showUnverifiedVerbs = false;
+    let unverifiedVerbs = [];
 
     let verbRef = createRef();
+
+    async function loadUnverifiedVerbs() {
+        showUnverifiedVerbs = true;
+        let l_ref = await db.collection('verbs').where('verified', '==', false).get();
+        let l_data_arr = [];
+
+        l_ref.forEach((e, i) => {
+            l_data_arr = [...l_data_arr, e.data()]
+        });
+
+        console.log(unverifiedVerbs);
+
+        unverifiedVerbs = l_data_arr;
+    }
 
     async function createRef() {
         let l_ref = await db.collection('verbs');
@@ -21,6 +38,7 @@
     async function createDoc() {
         const data = {
             name: name.toLowerCase(),
+            definition: definition.toLowerCase(),
             indicPresent: conjugations,
             verified: false
         };
@@ -44,7 +62,7 @@
 
         createDoc();
 
-        savedName = name;
+        savedName = name.toLowerCase();
         name = "";
         saved = true;
         conjugations = ['', '', '', '', '', ''];
@@ -60,11 +78,27 @@
         {/if}
         <input bind:value={name} placeholder="Verb">
         <br>
+        <br>
+        <input bind:value={definition} placeholder="Defition: to ____">
+        <br>
         {#each [0, 1, 2, 3, 4, 5] as c}
             <input bind:value={conjugations[c]} placeholder={forms[c]}>
             <br>
         {/each}
         <button on:click={createVerb}>Create</button>
+        <br>
+        {#if !showUnverifiedVerbs}
+            <button on:click={loadUnverifiedVerbs}>Load Unverified Verbs</button>
+            <p>Unverified verbs may include sensitive information</p>
+        {:else}
+            {#await unverifiedVerbs}
+                <p>Loading</p>
+            {:then unverifiedVerbs} 
+                {#each unverifiedVerbs as v}
+                    <p>{v.name}</p>
+                {/each}
+            {/await}
+        {/if}
     </div>
 
 </main>

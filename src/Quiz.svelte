@@ -22,13 +22,11 @@
 	async function getVerbs() {
 		//const db = firebase.firestore();
 
-		let verbsRef = await db.collection('verbs').get();
+		let verbsRef = await db.collection('verbs').where('verified', '==', true).get();
 		let l_verbs = [];
 
 		verbsRef.forEach(v => {
-            if (v.data().verified === true) {
-                l_verbs = [...l_verbs, v.data()];
-            }
+			l_verbs = [...l_verbs, v.data()];
 		});
 
 		console.log(l_verbs);
