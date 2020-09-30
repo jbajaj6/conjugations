@@ -72,49 +72,29 @@
 </script>
 
 <main>
-	{#await verbs}
+	<div class="center">
+		{#await verbs}
 		<h1>Verb: Loading...</h1>
-	{:then verbs}
-		<h1>Verb: {verbs[index].name}</h1>
-	{/await}
-	<p>Your last answer was {correct ? "correct" : "incorrect"}</p>
-	{#if !correct}
-		{#each responses as r}
-			<p>{r}</p>
+		{:then verbs}
+			<h1>Verb: {verbs[index].name}</h1>
+			<p>{verbs[index].definition}</p>
+		{/await}
+		<p>Your last answer was {correct ? "correct" : "incorrect"}</p>
+		{#if !correct}
+			{#each responses as r}
+				<p>{r}</p>
+			{/each}
+		{/if}
+
+		{#each [0, 1, 2, 3, 4, 5] as c}
+			<input bind:value={conjugations[c]} placeholder={forms[c]}>
+			<br>
 		{/each}
-	{/if}
+		<button class="button-submit" on:click={handleSubmit}>
+			Check
+		</button>
 
-	{#each [0, 1, 2, 3, 4, 5] as c}
-		<input bind:value={conjugations[c]} placeholder={forms[c]}>
-		<br>
-	{/each}
-	<button on:click={handleSubmit}>
-		Check
-	</button>
-
-	<p>Pro Tip: place ^ infront of accented characters ( ^n = ñ ) and ^^u for ü</p>
-	<p>Pro Tip #2: place ! in boxes you want to skip</p>
+		<p>Pro Tip: place ^ infront of accented characters ( ^n = ñ ) and ^^u for ü</p>
+		<p>Pro Tip #2: place ! in boxes you want to skip</p>
+	</div>
 </main>
-
-<style>
-	main {
-		text-align: center;
-		padding: 1em;
-		max-width: 240px;
-		margin: 0 auto;
-		font-family: 'Raleway', sans-serif;
-	}
-
-	h1 {
-		color: #ff3e00;
-		text-transform: uppercase;
-		font-size: 4em;
-		font-weight: 100;
-	}
-
-	@media (min-width: 640px) {
-		main {
-			max-width: none;
-		}
-	}
-</style>

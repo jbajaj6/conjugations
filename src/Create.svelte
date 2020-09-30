@@ -47,6 +47,15 @@
     }
 
     async function createVerb() {
+        name = name.toLowerCase();
+        name = name.replaceAll("^a", "á");
+        name = name.replaceAll("^e", "é");
+        name = name.replaceAll("^i", "í");
+        name = name.replaceAll("^o", "ó");
+        name = name.replaceAll("^u", "ú");
+        name = name.replaceAll("^^u", "ü");
+        name = name.replaceAll("^n", "ñ");
+
         conjugations.forEach((c, i) => {
             c = c.toLowerCase();
             c = c.replaceAll("^a", "á");
@@ -66,6 +75,7 @@
         name = "";
         saved = true;
         conjugations = ['', '', '', '', '', ''];
+        definition = "";
     }
 </script>
 
@@ -85,7 +95,7 @@
             <input bind:value={conjugations[c]} placeholder={forms[c]}>
             <br>
         {/each}
-        <button on:click={createVerb}>Create</button>
+        <button class="button-create" on:click={createVerb}>Create</button>
         <br>
         {#if !showUnverifiedVerbs}
             <button on:click={loadUnverifiedVerbs}>Load Unverified Verbs</button>
@@ -102,29 +112,3 @@
     </div>
 
 </main>
-
-<style>
-	main {
-		padding: 1em;
-		max-width: 240px;
-		margin: 0 auto;
-		font-family: 'Raleway', sans-serif;
-	}
-
-	.center {
-		text-align: center;
-	}
-
-	h1 {
-		color: #ff3e00;
-		text-transform: uppercase;
-		font-size: 4em;
-		font-weight: 100;
-	}
-
-	@media (min-width: 640px) {
-		main {
-			max-width: none;
-		}
-	}
-</style>
